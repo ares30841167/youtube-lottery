@@ -1,0 +1,110 @@
+extends layout
+
+block content
+  div.container-fluid
+    p.text-center.h1 YouTube直播抽獎小工具
+    p.text-center.h6 Version 1.2.0
+    div.container-fluid.mt-5
+      form
+        fieldset
+          legend 第一步 請輸入要抓取聊天訊息的影片ID
+          .mb-3
+            label.form-label(for='vid') 影片ID
+            .input-group.mb-3
+              input#vid.form-control(type='text' name="vid" placeholder='請輸入YouTube網址watch?v=後面的ID即可')
+              button#liveChat_start.btn.btn-primary(type="button") 開始抓取聊天紀錄
+    div.container-fluid.mt-3
+      form
+        fieldset
+          legend 第二步 查看並確認直播聊天訊息抓取狀況
+          .mb-3
+            textarea#proc_log.form-control(readonly style="height: 150px; background-color: white;")
+    div.container-fluid.mt-3
+      form
+        fieldset
+          legend 第三步 設定篩選條件獲取符合的聊天訊息
+          .mb-3
+            label.form-label(for='vid') 時間範圍
+            .input-group
+              input#range_date_start.form-control(type='date' name="range_date_start" required)
+              input#range_time_start.form-control(type='time' name="range_time_start" required)
+              span(class="input-group-text") 到
+              input#range_date_end.form-control(type='date' name="range_date_end" required)
+              input#range_time_end.form-control(type='time' name="range_time_end" required)
+          .mb-4
+            label.form-label(for='vid') 關鍵字 (搜尋_和%時須特別注意，需要再這兩個字元前面加\ e.g 要搜尋_則搜尋欄內要打\_)
+            p.form-label 多組關鍵字搜尋請在每個關鍵字中間以|隔開，關鍵字須包含在同句子請用%隔開(有順序之分)
+            .input-group.mb-3
+              input#keyword.form-control(type='text' name="keyword" placeholder='請輸入找尋的關鍵字 (留空為無限制，將顯示所有聊天訊息)')
+              button#keyword_save.btn.btn-primary(type="button") 儲存關鍵字
+          .row.row-cols-auto.mb-3.g-2
+            .col
+              button#keyword_show_list.btn.btn-primary(type="button" data-bs-toggle="modal" data-bs-target="#keywordListModal") 關鍵字儲存清單
+            .col
+              button#liveChat_search.btn.btn-primary(type="button") 搜尋
+            .col
+              button#liveChat_search_without_datetime.btn.btn-primary(type="button") 無視時間範圍搜尋(全聊天訊息搜尋)
+            .col
+              button#liveChat_search_reset_datetime.btn.btn-primary(type="button") 重設時間範圍
+            .col
+              button#liveChat_search_clear.btn.btn-danger(type="button") 清除搜尋結果
+          div#search_count 符合條件的總共0筆
+          .mb-3(style="height: 300px; overflow: auto;")
+            table#search_table.table.table-hover
+              thead
+                tr
+                  th 發言時間
+                  th 頭像
+                  th 作者
+                  th 內容
+    div.container-fluid.mt-3
+      form
+        fieldset
+          legend 第四步 選取人數並抽出獲獎人產生名單
+          .input-group.mb-3
+            input#pick_amount.form-control(type='number' name="pick_number" placeholder='請輸入人數' min=1 step=1)
+            span(class="input-group-text") 人
+            button#pick.btn.btn-primary(type="button") 抽選
+          .mb-3
+            button#pick_clear.btn.btn-danger(type="button") 清除抽選結果
+          div#pick_count 總共抽出0筆
+          .mb-3(style="height: 300px; overflow: auto;")
+            table#pick_table.table.table-hover
+              thead
+                tr
+                  th 發言時間
+                  th 頭像
+                  th 作者
+                  th 內容
+    div.container-fluid.mt-3
+      form
+        fieldset
+          legend 控制區
+          .row.row-cols-auto.mb-3.g-2
+            .col
+              button#liveChat_stop.btn.btn-danger(type="button") 停止抓取紀錄
+            .col
+              button#liveChat_clear.btn.btn-danger(type="button") 從資料庫清除已抓取到的紀錄
+            .col
+              button#keyword_clear.btn.btn-danger(type="button") 從資料庫清除所有儲存的關鍵字
+
+    #keywordListModal.modal.fade(tabindex='-1' aria-labelledby='keywordListModal' aria-hidden='true')
+      .modal-dialog.modal-dialog-scrollable.modal-dialog-centered.modal-lg
+        .modal-content
+          .modal-header
+            h5#exampleModalLabel.modal-title 已儲存的關鍵字
+            button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+          .modal-body
+            table#keyword_list.table.table-hover
+              thead
+                tr
+                  th(scope='col' style='width: 6%') #
+                  th(scope='col' style='width: 69%') 關鍵字
+                  th(scope='col' style='width: 25%') 操作
+              tbody
+
+          .modal-footer
+            button#close_keyword_list_btn.btn.btn-secondary(type='button' data-bs-dismiss='modal') 關閉
+
+  footer.py-3.text-center
+    p.mb-1 © 2021-2022 Design By GUAN-YU CHEN
